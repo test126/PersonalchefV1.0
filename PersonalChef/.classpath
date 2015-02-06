@@ -15,5 +15,7 @@
 	<classpathentry kind="lib" path="libs/SocialSDK_WeiXin_1.jar"/>
 	<classpathentry kind="lib" path="libs/SocialSDK_WeiXin_2.jar"/>
 	<classpathentry kind="lib" path="libs/umeng_social_sdk.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="libs/volley.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
