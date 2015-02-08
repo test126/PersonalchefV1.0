@@ -64,6 +64,9 @@
 # view AndroidManifest.xml #generated:59
 -keep class com.goodfriends.personalchef.WebUrlActivity { <init>(...); }
 
+# view res/layout/activity_home.xml #generated:53
+-keep class com.goodfriends.personalchef.view.AdvsViewPager { <init>(...); }
+
 # view res/layout/activity_category.xml #generated:45
 # view res/layout/activity_category.xml #generated:51
 -keep class com.goodfriends.personalchef.view.ExpandTabView { <init>(...); }
@@ -95,7 +98,7 @@
 -keep class com.umeng.socialize.view.ShareActivity { <init>(...); }
 
 # view res/layout/umeng_socialize_post_share.xml #generated:2
-# view sw550dp-large\res/layout-sw550dp-large/umeng_socialize_post_share.xml #generated:2
+# view sw550dp-large/res/layout-sw550dp-large/umeng_socialize_post_share.xml #generated:2
 -keep class com.umeng.socialize.view.wigets.KeyboardListenRelativeLayout { <init>(...); }
 
 # view res/layout/umeng_socialize_at_view.xml #generated:21

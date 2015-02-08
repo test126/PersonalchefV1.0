@@ -1,5 +1,6 @@
 package com.goodfriends.personalchef.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,19 +17,18 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.goodfriends.personalchef.ChefDetailActivity;
 import com.goodfriends.personalchef.DishDetailActivity;
@@ -36,6 +36,7 @@ import com.goodfriends.personalchef.LoadingActivity;
 import com.goodfriends.personalchef.MainActivity;
 import com.goodfriends.personalchef.R;
 import com.goodfriends.personalchef.WebUrlActivity;
+import com.goodfriends.personalchef.adapter.HomeAdAdapter;
 import com.goodfriends.personalchef.bean.Advs;
 import com.goodfriends.personalchef.bean.Chefs;
 import com.goodfriends.personalchef.bean.Dish;
@@ -45,24 +46,20 @@ import com.goodfriends.personalchef.common.CommonFun;
 import com.goodfriends.personalchef.util.AsynImageLoader;
 
 @SuppressLint("HandlerLeak")
-public class HomeFragment extends Fragment implements OnClickListener,
-		OnTouchListener {
+public class HomeFragment extends Fragment implements OnClickListener {
 
 	private TextView chushi_more, caipin_more, phone;
 	private ImageView chushi1, chushi2, chushi3, caipin1, caipin2, caipin3,
 			caipin4;
+	private ScrollView scrollView;
 	private List<Advs> advs = null;
+	private List<View> adImages = new ArrayList();
+	private HomeAdAdapter adAdapter = null;
 	public static List<Dish> dishs = null;
 	private List<Chefs> chefs = null;
-	private ViewFlipper adv_viewFlipper;
-	private RadioGroup radioGroup;
+	private ViewPager adv_viewPager;
 	private ProgressDialog progressDialog;
 	private ImageView huodong1, huodong2;
-	private int CHECK = 0;
-	// 左右滑动时手指按下的X坐标
-	float touchDownX;
-	// 左右滑动时手指松开的X坐标
-	float touchUpX;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,64 +125,6 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		}
 	};
 
-	synchronized public void notifyFileChanged() {
-		if (timer != null) {
-			timer.cancel();
-		}
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-
-			public void run() {
-				timer = null;
-				Message message = new Message();
-				message.what = MSG_FILE_CHANGED_TIMER;
-				handler.sendMessage(message);
-			}
-
-		}, 3000);
-	}
-
-	private static final int MSG_FILE_CHANGED_TIMER = 100;
-
-	private Timer timer;
-
-	private Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MSG_FILE_CHANGED_TIMER:
-				updateAdvUI();
-				notifyFileChanged();
-				break;
-			}
-			super.handleMessage(msg);
-		}
-	};
-
-	private void updateAdvUI() {
-		// TODO Auto-generated method stub
-		int lengh = advs.size();
-		if (lengh != 0 && CHECK < lengh - 1) {
-			CHECK += 1;
-			radioGroup.check(CHECK);
-		} else if (lengh != 0 && CHECK == (lengh - 1)) {
-			CHECK = 0;
-			radioGroup.check(0);
-		}
-		adv_viewFlipper.showNext();
-	}
-
-	private void updateAdvUI2() {
-		// TODO Auto-generated method stub
-		int lengh = advs.size();
-		if (lengh != 0 && CHECK > 0) {
-			CHECK = CHECK - 1;
-			radioGroup.check(CHECK);
-		} else if (lengh != 0 && CHECK == 0) {
-			CHECK = lengh - 1;
-			radioGroup.check(CHECK);
-		}
-		adv_viewFlipper.showPrevious();
-	}
 
 	private Handler myHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -199,18 +138,12 @@ public class HomeFragment extends Fragment implements OnClickListener,
 					AsynImageLoader asynImageLoader2 = new AsynImageLoader();
 					asynImageLoader2.showImageAsyn(adv_image, advs.get(i)
 							.getImgurl(), R.drawable.nopic);
-					adv_viewFlipper.addView(adv_image);
-					RadioButton rb = new RadioButton(getActivity());
-					rb.setId(i);
-					rb.setClickable(false);
-					rb.setPadding(45, 0, 0, 0);
-					rb.setButtonDrawable(R.drawable.adv_gallery_mark_selector);
-					rb.setBackgroundResource(android.R.color.transparent);
-					radioGroup.addView(rb);
+					adImages.add(adv_image);
 				}
-				radioGroup.check(CHECK);
 				closeDialog();
-				notifyFileChanged();
+				adAdapter.notifyDataSetChanged();
+				adAdapter.setRadioCircles();
+				//notifyFileChanged();
 				break;
 			case 1:
 				if (dishs.size() != 0) {
@@ -250,6 +183,15 @@ public class HomeFragment extends Fragment implements OnClickListener,
 				Intent intent1 = new Intent(getActivity(), WebUrlActivity.class);
 				intent1.putExtra("url", indexFuns.get(1).getUrl());
 				startActivity(intent1);
+				break;
+			case 100:
+				adv_viewPager.setCurrentItem(msg.arg1);
+				break;	
+			case 101:
+				Intent adIntent = new Intent(getActivity(), WebUrlActivity.class);
+				String url = advs.get(msg.arg1).getUrl();
+				adIntent.putExtra("url", url);
+				startActivity(adIntent);
 				break;
 			default:
 				break;
@@ -509,12 +451,6 @@ public class HomeFragment extends Fragment implements OnClickListener,
 			builder_call.create();
 			builder_call.show();
 			break;
-		case R.id.news_body_veiw:
-			Intent intent = new Intent(getActivity(), WebUrlActivity.class);
-			String url = advs.get(CHECK).getUrl();
-			intent.putExtra("url", url);
-			startActivity(intent);
-			break;
 		default:
 			break;
 		}
@@ -579,6 +515,8 @@ public class HomeFragment extends Fragment implements OnClickListener,
 
 	private void initView() {
 		showDialog("loading");
+		scrollView = (ScrollView) getActivity().findViewById(R.id.scrollView);
+		scrollView.setHorizontalScrollBarEnabled(false);
 		chushi_more = (TextView) getActivity().findViewById(
 				R.id.home_chushi_more);
 		chushi_more.setOnClickListener(this);
@@ -599,8 +537,6 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		caipin3.setOnClickListener(this);
 		caipin4 = (ImageView) getActivity().findViewById(R.id.home_caipin_iv4);
 		caipin4.setOnClickListener(this);
-		radioGroup = (RadioGroup) getActivity().findViewById(
-				R.id.advs_gallery_mark);
 		huodong1 = (ImageView) getActivity().findViewById(R.id.home_huodong1);
 		huodong1.setOnClickListener(this);
 		huodong2 = (ImageView) getActivity().findViewById(R.id.home_huodong2);
@@ -623,9 +559,13 @@ public class HomeFragment extends Fragment implements OnClickListener,
 		caixi_ll8.setOnClickListener(this);
 		phone = (TextView) getActivity().findViewById(R.id.phone);
 		phone.setOnClickListener(this);
-		adv_viewFlipper = (ViewFlipper) getActivity().findViewById(
+		adv_viewPager = (ViewPager) getActivity().findViewById(
 				R.id.news_body_veiw);
-		adv_viewFlipper.setOnTouchListener(this);
+		adAdapter = new HomeAdAdapter(adImages,getActivity(),myHandler);
+		adv_viewPager.setAdapter(adAdapter);
+		adv_viewPager.setOnPageChangeListener(adAdapter);
+		
+		//adv_viewPager.setOnClickListener(this);
 	}
 
 	@Override
@@ -650,7 +590,7 @@ public class HomeFragment extends Fragment implements OnClickListener,
 	public void onDestroyView() {
 		// TODO Auto-generated method stub
 		super.onDestroyView();
-		CHECK = 0;
+		
 	}
 
 	private void showDialog(String s) {
@@ -678,39 +618,4 @@ public class HomeFragment extends Fragment implements OnClickListener,
 					.setVisibility(menuVisible ? View.VISIBLE : View.GONE);
 	}
 
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		// TODO Auto-generated method stub
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			// 取得左右滑动时手指按下的X坐标
-			touchDownX = event.getX();
-			return true;
-		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			// 取得左右滑动时手指松开的X坐标
-			touchUpX = event.getX();
-			// 从左往右，看前一个View
-			if (touchUpX - touchDownX > 20) {
-				// 显示前一个View
-				// adv_viewFlipper.setInAnimation(getActivity(),
-				// R.drawable.push_left_in);
-				// adv_viewFlipper.setOutAnimation(getActivity(),
-				// R.drawable.push_left_in);
-				updateAdvUI2();
-			} else if (touchDownX - touchUpX > 20) {
-				// 显示下一个view
-				// adv_viewFlipper.setInAnimation(getActivity(),
-				// R.drawable.push_left_out);
-				// adv_viewFlipper.setOutAnimation(getActivity(),
-				// R.drawable.push_left_out);
-				updateAdvUI();
-			} else if (Math.abs(touchDownX - touchUpX) < 10) {
-				Intent intent = new Intent(getActivity(), WebUrlActivity.class);
-				String url = advs.get(CHECK).getUrl();
-				intent.putExtra("url", url);
-				startActivity(intent);
-			}
-			return true;
-		}
-		return false;
-	}
 }
