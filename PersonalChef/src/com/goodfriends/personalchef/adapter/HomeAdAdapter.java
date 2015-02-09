@@ -46,7 +46,7 @@ public class HomeAdAdapter extends PagerAdapter implements OnPageChangeListener,
 				loopAdvUI();
 			}
 
-		},3000);
+		},10,3000);
 		
 	}
 	 

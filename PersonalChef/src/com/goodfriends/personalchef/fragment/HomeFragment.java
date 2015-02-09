@@ -45,6 +45,7 @@ import com.goodfriends.personalchef.bean.IndexFun;
 import com.goodfriends.personalchef.common.Common;
 import com.goodfriends.personalchef.common.CommonFun;
 import com.goodfriends.personalchef.util.AsynImageLoader;
+import com.goodfriends.personalchef.util.VolleyImage;
 
 @SuppressLint("HandlerLeak")
 public class HomeFragment extends Fragment implements OnClickListener {
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private ViewPager adv_viewPager;
 	private ProgressDialog progressDialog;
 	private ImageView huodong1, huodong2;
+	private VolleyImage volley = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +81,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		super.onActivityCreated(savedInstanceState);
 
 		initView();
-
+		volley = new VolleyImage(this.getActivity());
+		
 		if (advs != null) {
 			myHandler.sendEmptyMessage(0);
 		} else {
@@ -138,15 +141,12 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			AsynImageLoader asynImageLoader = new AsynImageLoader();
 			switch (msg.what) {
 			case 0:
-				adImages.clear();
 				int size = advs.size();
 				for (int i = 0; i < size; i++) {
 					ImageView adv_image = new ImageView(getActivity());
 					adv_image.setScaleType(ScaleType.CENTER_CROP);
-					AsynImageLoader asynImageLoader2 = new AsynImageLoader();
-					asynImageLoader2.showImageAsyn(adv_image, advs.get(i)
-							.getImgurl(), R.drawable.nopic);
 					adImages.add(adv_image);
+					volley.loadImg(adv_image, advs.get(i).getImgurl());
 				}
 				closeDialog();
 				adAdapter.notifyDataSetChanged();
@@ -600,6 +600,13 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onDestroyView();
 		
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		adAdapter.free();
 	}
 
 	private void showDialog(String s) {
