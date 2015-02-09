@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -66,6 +67,12 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.activity_home, null);
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
 	}
 
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -131,6 +138,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			AsynImageLoader asynImageLoader = new AsynImageLoader();
 			switch (msg.what) {
 			case 0:
+				adImages.clear();
 				int size = advs.size();
 				for (int i = 0; i < size; i++) {
 					ImageView adv_image = new ImageView(getActivity());
@@ -561,6 +569,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		phone.setOnClickListener(this);
 		adv_viewPager = (ViewPager) getActivity().findViewById(
 				R.id.news_body_veiw);
+		adImages = new ArrayList<View>();
 		adAdapter = new HomeAdAdapter(adImages,getActivity(),myHandler);
 		adv_viewPager.setAdapter(adAdapter);
 		adv_viewPager.setOnPageChangeListener(adAdapter);

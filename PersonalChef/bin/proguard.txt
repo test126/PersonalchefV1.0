@@ -4,64 +4,64 @@
 # view res/layout/main.xml #generated:7
 -keep class android.support.v4.view.ViewPager { <init>(...); }
 
-# view AndroidManifest.xml #generated:114
+# view AndroidManifest.xml #generated:115
 -keep class com.baidu.location.f { <init>(...); }
 
-# view AndroidManifest.xml #generated:88
+# view AndroidManifest.xml #generated:89
 -keep class com.goodfriends.personalchef.AddAddressActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:84
+# view AndroidManifest.xml #generated:85
 -keep class com.goodfriends.personalchef.AddressActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:51
+# view AndroidManifest.xml #generated:52
 -keep class com.goodfriends.personalchef.ChefDetailActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:92
+# view AndroidManifest.xml #generated:93
 -keep class com.goodfriends.personalchef.CollectActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:110
+# view AndroidManifest.xml #generated:111
 -keep class com.goodfriends.personalchef.CouponActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:47
+# view AndroidManifest.xml #generated:48
 -keep class com.goodfriends.personalchef.DishDetailActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:107
+# view AndroidManifest.xml #generated:108
 -keep class com.goodfriends.personalchef.EvalOrderActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:63
+# view AndroidManifest.xml #generated:64
 -keep class com.goodfriends.personalchef.FeedBackActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:80
+# view AndroidManifest.xml #generated:81
 -keep class com.goodfriends.personalchef.ForgetActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:72
+# view AndroidManifest.xml #generated:73
 -keep class com.goodfriends.personalchef.GuideViewActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:33
+# view AndroidManifest.xml #generated:34
 -keep class com.goodfriends.personalchef.LoadingActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:68
+# view AndroidManifest.xml #generated:69
 -keep class com.goodfriends.personalchef.LoginActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:43
+# view AndroidManifest.xml #generated:44
 -keep class com.goodfriends.personalchef.MainActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:100
+# view AndroidManifest.xml #generated:101
 -keep class com.goodfriends.personalchef.MoreChefActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:96
+# view AndroidManifest.xml #generated:97
 -keep class com.goodfriends.personalchef.OrderActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:104
+# view AndroidManifest.xml #generated:105
 -keep class com.goodfriends.personalchef.OrderDetailActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:76
+# view AndroidManifest.xml #generated:77
 -keep class com.goodfriends.personalchef.RegActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:55
+# view AndroidManifest.xml #generated:56
 -keep class com.goodfriends.personalchef.SettingActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:59
+# view AndroidManifest.xml #generated:60
 -keep class com.goodfriends.personalchef.WebUrlActivity { <init>(...); }
 
 # view res/layout/activity_home.xml #generated:53
@@ -85,20 +85,20 @@
 # view res/layout/activity_bill.xml #generated:224
 -keep class com.goodfriends.personalchef.view.ScrollLayout { <init>(...); }
 
-# view AndroidManifest.xml #generated:131
+# view AndroidManifest.xml #generated:132
 -keep class com.goodfriends.personalchef.wxapi.WXEntryActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:152
+# view AndroidManifest.xml #generated:153
 -keep class com.tencent.connect.common.AssistActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:139
+# view AndroidManifest.xml #generated:140
 -keep class com.tencent.tauth.AuthActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:124
+# view AndroidManifest.xml #generated:125
 -keep class com.umeng.socialize.view.ShareActivity { <init>(...); }
 
 # view res/layout/umeng_socialize_post_share.xml #generated:2
-# view sw550dp-large/res/layout-sw550dp-large/umeng_socialize_post_share.xml #generated:2
+# view sw550dp-large\res/layout-sw550dp-large/umeng_socialize_post_share.xml #generated:2
 -keep class com.umeng.socialize.view.wigets.KeyboardListenRelativeLayout { <init>(...); }
 
 # view res/layout/umeng_socialize_at_view.xml #generated:21
