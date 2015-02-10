@@ -75,6 +75,17 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
+
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
 		initView();
 		volley = new MyImageLoader(this.getActivity());
 		
@@ -93,10 +104,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		} else {
 			new Thread(chefRunnable).start();
 		}
-	
-	}
-
-
+	};
 
 	Runnable advRunnable = new Runnable() {
 

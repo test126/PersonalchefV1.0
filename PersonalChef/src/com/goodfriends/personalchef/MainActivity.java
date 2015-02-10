@@ -1,6 +1,7 @@
 package com.goodfriends.personalchef;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,8 +30,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	public static CategaryFragment categoryFragment;
 	public static OrderFragment orderFragment;
 	public static MeFragment meFragment;
-	public static RadioGroup radioGroup;
+	
+	public RadioGroup radioGroup;
+	
+	private FragmentManager manager;
+	private FragmentTransaction trans;
 
+	public Fragment currentFragment;
+	public Fragment fromFragment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +45,9 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		SysApplication.getInstance().addActivity(this);
 		setContentView(R.layout.activity_main1);
 
+		manager = getSupportFragmentManager();
+		trans = manager.beginTransaction();
+		
 		mTab1 = (RadioButton) findViewById(R.id.radio_button1);
 		mTab2 = (RadioButton) findViewById(R.id.radio_button2);
 		mTab3 = (RadioButton) findViewById(R.id.radio_button3);
@@ -78,6 +88,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void switchFragment(Fragment from,Fragment to){
+		if(currentFragment==null){
+			
+		}
+	}
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
@@ -87,34 +102,54 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		case R.id.radio_button1:
 			if (homeFragment == null) {
 				homeFragment = new HomeFragment();
+				trans.add(R.id.container, homeFragment)
+				.commit(); 
+				currentFragment = homeFragment;
 			}
-			tx.replace(R.id.container, homeFragment);
-			tx.addToBackStack(null);
-			tx.commit();
+			if (!homeFragment.isAdded()) { // 先判断是否被add过
+				tx.hide(currentFragment).add(R.id.container, homeFragment)
+						.commit(); // 隐藏当前的fragment，add下一个到Activity中
+			} else {
+				tx.hide(currentFragment).show(homeFragment).commit(); // 隐藏当前的fragment，显示下一个
+			}
+			// tx.replace(R.id.container, homeFragment);
+			// tx.addToBackStack(null);
+			// tx.commit();
 			break;
 		case R.id.radio_button2:
 			if (categoryFragment == null) {
 				categoryFragment = new CategaryFragment();
+				tx.add(R.id.container, categoryFragment);
 			}
-			tx.replace(R.id.container, categoryFragment);
-			tx.addToBackStack(null);
-			tx.commit();
+
+			tx.hide(homeFragment).hide(orderFragment).hide(meFragment)
+					.show(categoryFragment).commit();
+			// tx.replace(R.id.container, categoryFragment);
+			// tx.addToBackStack(null);
+			// tx.commit();
 			break;
 		case R.id.radio_button3:
 			if (orderFragment == null) {
 				orderFragment = new OrderFragment();
+				tx.add(R.id.container, orderFragment);
 			}
-			tx.replace(R.id.container, orderFragment);
-			tx.addToBackStack(null);
-			tx.commit();
+			tx.hide(homeFragment).hide(categoryFragment).hide(meFragment)
+					.show(orderFragment).commit();
+
+			// tx.replace(R.id.container, orderFragment);
+			// tx.addToBackStack(null);
+			// tx.commit();
 			break;
 		case R.id.radio_button4:
 			if (meFragment == null) {
 				meFragment = new MeFragment();
+				tx.add(R.id.container, meFragment);
 			}
-			tx.replace(R.id.container, meFragment);
-			tx.addToBackStack(null);
-			tx.commit();
+			tx.hide(homeFragment).hide(categoryFragment).hide(orderFragment)
+					.show(meFragment).commit();
+			// tx.replace(R.id.container, meFragment);
+			// tx.addToBackStack(null);
+			// tx.commit();
 			break;
 		default:
 			break;
