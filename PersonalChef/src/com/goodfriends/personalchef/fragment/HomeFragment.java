@@ -45,7 +45,7 @@ import com.goodfriends.personalchef.bean.IndexFun;
 import com.goodfriends.personalchef.common.Common;
 import com.goodfriends.personalchef.common.CommonFun;
 import com.goodfriends.personalchef.util.AsynImageLoader;
-import com.goodfriends.personalchef.util.VolleyImage;
+import com.goodfriends.personalchef.util.MyImageLoader;
 
 @SuppressLint("HandlerLeak")
 public class HomeFragment extends Fragment implements OnClickListener {
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private ViewPager adv_viewPager;
 	private ProgressDialog progressDialog;
 	private ImageView huodong1, huodong2;
-	private VolleyImage volley = null;
+	private MyImageLoader volley = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		super.onActivityCreated(savedInstanceState);
 
 		initView();
-		volley = new VolleyImage(this.getActivity());
+		volley = new MyImageLoader(this.getActivity());
 		
 		if (advs != null) {
 			myHandler.sendEmptyMessage(0);
@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					ImageView adv_image = new ImageView(getActivity());
 					adv_image.setScaleType(ScaleType.CENTER_CROP);
 					adImages.add(adv_image);
-					volley.loadImg(adv_image, advs.get(i).getImgurl());
+					volley.loadBitmap(adv_image, advs.get(i).getImgurl());
 				}
 				closeDialog();
 				adAdapter.notifyDataSetChanged();
