@@ -88,11 +88,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void switchFragment(Fragment from,Fragment to){
-		if(currentFragment==null){
-			
-		}
-	}
+	  public void switchContent(Fragment from, Fragment to) {
+	        if (currentFragment != to) {
+	        	currentFragment = to;
+	            if (!to.isAdded()) {    // 先判断是否被add过
+	                trans.hide(from).add(R.id.container, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
+	            } else {
+	            	trans.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
+	            }
+	        }
+	    }
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
@@ -100,56 +105,54 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		FragmentTransaction tx = fm.beginTransaction();
 		switch (arg0.getId()) {
 		case R.id.radio_button1:
+			
 			if (homeFragment == null) {
 				homeFragment = new HomeFragment();
 				trans.add(R.id.container, homeFragment)
 				.commit(); 
 				currentFragment = homeFragment;
+				break;
+			}else{
+				tx.hide(currentFragment)
+				.show(homeFragment).commit();
+				currentFragment = homeFragment;
 			}
-			if (!homeFragment.isAdded()) { // 先判断是否被add过
-				tx.hide(currentFragment).add(R.id.container, homeFragment)
-						.commit(); // 隐藏当前的fragment，add下一个到Activity中
-			} else {
-				tx.hide(currentFragment).show(homeFragment).commit(); // 隐藏当前的fragment，显示下一个
-			}
-			// tx.replace(R.id.container, homeFragment);
-			// tx.addToBackStack(null);
-			// tx.commit();
 			break;
 		case R.id.radio_button2:
 			if (categoryFragment == null) {
 				categoryFragment = new CategaryFragment();
-				tx.add(R.id.container, categoryFragment);
+				tx.hide(currentFragment).add(R.id.container, categoryFragment);
+				currentFragment = categoryFragment;
+				break;
+			}else{
+				tx.hide(currentFragment)
+				.show(categoryFragment).commit();
+				currentFragment = categoryFragment;
 			}
-
-			tx.hide(homeFragment).hide(orderFragment).hide(meFragment)
-					.show(categoryFragment).commit();
-			// tx.replace(R.id.container, categoryFragment);
-			// tx.addToBackStack(null);
-			// tx.commit();
 			break;
 		case R.id.radio_button3:
 			if (orderFragment == null) {
 				orderFragment = new OrderFragment();
-				tx.add(R.id.container, orderFragment);
+				tx.hide(currentFragment).add(R.id.container, orderFragment);
+				currentFragment = orderFragment;
+				break;
+			}else{
+				tx.hide(currentFragment)
+				.show(orderFragment).commit();
+				currentFragment = orderFragment;
 			}
-			tx.hide(homeFragment).hide(categoryFragment).hide(meFragment)
-					.show(orderFragment).commit();
-
-			// tx.replace(R.id.container, orderFragment);
-			// tx.addToBackStack(null);
-			// tx.commit();
 			break;
 		case R.id.radio_button4:
 			if (meFragment == null) {
 				meFragment = new MeFragment();
-				tx.add(R.id.container, meFragment);
+				tx.hide(currentFragment).add(R.id.container, meFragment);
+				currentFragment = meFragment;
+				break;
+			}else{
+				tx.hide(currentFragment)
+				.show(meFragment).commit();
+				currentFragment = meFragment;
 			}
-			tx.hide(homeFragment).hide(categoryFragment).hide(orderFragment)
-					.show(meFragment).commit();
-			// tx.replace(R.id.container, meFragment);
-			// tx.addToBackStack(null);
-			// tx.commit();
 			break;
 		default:
 			break;
