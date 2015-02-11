@@ -44,8 +44,10 @@ import com.goodfriends.personalchef.bean.Dish;
 import com.goodfriends.personalchef.bean.IndexFun;
 import com.goodfriends.personalchef.common.Common;
 import com.goodfriends.personalchef.common.CommonFun;
+import com.goodfriends.personalchef.common.Msg;
 import com.goodfriends.personalchef.util.AsynImageLoader;
 import com.goodfriends.personalchef.util.MyImageLoader;
+import com.goodfriends.personalchef.util.VolleyHttp;
 
 @SuppressLint("HandlerLeak")
 public class HomeFragment extends Fragment implements OnClickListener {
@@ -62,19 +64,22 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private ViewPager adv_viewPager;
 	private ProgressDialog progressDialog;
 	private ImageView huodong1, huodong2;
-	private MyImageLoader volley = null;
+	private MyImageLoader imgLoader = null;
+	private VolleyHttp http = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		return inflater.inflate(R.layout.activity_home, null);
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		adImages = new ArrayList<View>();
+		http = new VolleyHttp(this.getActivity(), myHandler);
+		http.requestAdvs();
+		imgLoader = new MyImageLoader(this.getActivity());
 	}
 
 	@Override
@@ -85,15 +90,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
 		initView();
-		volley = new MyImageLoader(this.getActivity());
-		
-		if (advs != null) {
-			myHandler.sendEmptyMessage(0);
-		} else {
-			new Thread(advRunnable).start();
-		}
 		if (dishs != null) {
 			myHandler.sendEmptyMessage(1);
 		} else {
@@ -106,16 +103,16 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		}
 	};
 
-	Runnable advRunnable = new Runnable() {
-
-		public void run() {
-			// TODO Auto-generated method stub
-			advs = CommonFun.getAdv(getActivity());
-			if (advs != null) {
-				myHandler.sendEmptyMessage(0);
-			}
-		}
-	};
+	// Runnable advRunnable = new Runnable() {
+	//
+	// public void run() {
+	// // TODO Auto-generated method stub
+	// advs = CommonFun.getAdv(getActivity());
+	// if (advs != null) {
+	// myHandler.sendEmptyMessage(0);
+	// }
+	// }
+	// };
 
 	Runnable dishRunnable = new Runnable() {
 
@@ -141,23 +138,26 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		}
 	};
 
-
 	private Handler myHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			AsynImageLoader asynImageLoader = new AsynImageLoader();
 			switch (msg.what) {
-			case 0:
+			case Msg.get_advs_content:
+				advs = (List<Advs>) msg.obj;
 				int size = advs.size();
 				for (int i = 0; i < size; i++) {
 					ImageView adv_image = new ImageView(getActivity());
 					adv_image.setScaleType(ScaleType.CENTER_CROP);
+					imgLoader.loadBitmap(adv_image, advs.get(i).getImgurl());
 					adImages.add(adv_image);
-					volley.loadBitmap(adv_image, advs.get(i).getImgurl());
 				}
-				closeDialog();
 				adAdapter.notifyDataSetChanged();
 				adAdapter.setRadioCircles();
-				//notifyFileChanged();
+				closeDialog();
+				break;
+			case 0:
+				//closeDialog();
+				
+				// notifyFileChanged();
 				break;
 			case 1:
 				if (dishs.size() != 0) {
@@ -167,22 +167,16 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			case 2:
 				switch (chefs.size()) {
 				case 1:
-					asynImageLoader.showImageAsyn(chushi1, chefs.get(0)
-							.getHeadpicurl(), R.drawable.nopic);
+					imgLoader.loadBitmap(chushi1, chefs.get(0).getHeadpicurl());
 					break;
 				case 2:
-					asynImageLoader.showImageAsyn(chushi1, chefs.get(0)
-							.getHeadpicurl(), R.drawable.nopic);
-					asynImageLoader.showImageAsyn(chushi2, chefs.get(1)
-							.getHeadpicurl(), R.drawable.nopic);
+					imgLoader.loadBitmap(chushi1, chefs.get(0).getHeadpicurl());
+					imgLoader.loadBitmap(chushi2, chefs.get(1).getHeadpicurl());
 					break;
 				case 3:
-					asynImageLoader.showImageAsyn(chushi1, chefs.get(0)
-							.getHeadpicurl(), R.drawable.nopic);
-					asynImageLoader.showImageAsyn(chushi2, chefs.get(1)
-							.getHeadpicurl(), R.drawable.nopic);
-					asynImageLoader.showImageAsyn(chushi3, chefs.get(2)
-							.getHeadpicurl(), R.drawable.nopic);
+					imgLoader.loadBitmap(chushi1, chefs.get(0).getHeadpicurl());
+					imgLoader.loadBitmap(chushi2, chefs.get(1).getHeadpicurl());
+					imgLoader.loadBitmap(chushi3, chefs.get(2).getHeadpicurl());
 					break;
 				default:
 					break;
@@ -200,9 +194,10 @@ public class HomeFragment extends Fragment implements OnClickListener {
 				break;
 			case 100:
 				adv_viewPager.setCurrentItem(msg.arg1);
-				break;	
+				break;
 			case 101:
-				Intent adIntent = new Intent(getActivity(), WebUrlActivity.class);
+				Intent adIntent = new Intent(getActivity(),
+						WebUrlActivity.class);
 				String url = advs.get(msg.arg1).getUrl();
 				adIntent.putExtra("url", url);
 				startActivity(adIntent);
@@ -218,83 +213,68 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		switch (dishs.size()) {
 		case 1:
 			if (dishs.get(0).getBigimgurl() != null) {
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin1, dishs.get(0)
-						.getBigimgurl(), R.drawable.nopic);
+
+				imgLoader.loadBitmap(caipin1, dishs.get(0).getBigimgurl());
 			} else {
 				caipin1.setImageResource(R.drawable.nopic);
 			}
 			break;
 		case 2:
 			if (dishs.get(0).getMiddleimgurl() != null) {
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin1, dishs.get(0)
-						.getMiddleimgurl(), R.drawable.nopic);
+
+				imgLoader.loadBitmap(caipin1, dishs.get(0).getMiddleimgurl());
 			} else {
 				caipin1.setImageResource(R.drawable.nopic);
 			}
 			if (dishs.get(1).getSmallimgurl() != null) {
 
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin2, dishs.get(1)
-						.getSmallimgurl(), R.drawable.nopic);
+				imgLoader.loadBitmap(caipin2, dishs.get(1).getSmallimgurl());
 			} else {
 				caipin2.setImageResource(R.drawable.ic_launcher);
 			}
 			break;
 		case 3:
 			if (dishs.get(0).getSmallimgurl() != null) {
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin1, dishs.get(0)
-						.getSmallimgurl(), R.drawable.nopic);
+
+				imgLoader.loadBitmap(caipin1, dishs.get(0).getSmallimgurl());
 			} else {
 				caipin1.setImageResource(R.drawable.nopic);
 			}
 			if (dishs.get(1).getSmallimgurl() != null) {
 
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin2, dishs.get(1)
-						.getSmallimgurl(), R.drawable.nopic);
+				imgLoader.loadBitmap(caipin2, dishs.get(1).getSmallimgurl());
 			} else {
 				caipin2.setImageResource(R.drawable.ic_launcher);
 			}
 			if (dishs.get(2).getSmallimgurl() != null) {
 
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin3, dishs.get(2)
-						.getSmallimgurl(), R.drawable.nopic);
+				imgLoader.loadBitmap(caipin3, dishs.get(2).getSmallimgurl());
 			} else {
 				caipin3.setImageResource(R.drawable.ic_launcher);
 			}
 			break;
 		case 4:
 			if (dishs.get(0).getSmallimgurl() != null) {
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin1, dishs.get(0)
-						.getSmallimgurl(), R.drawable.nopic);
+
+				imgLoader.loadBitmap(caipin1, dishs.get(0).getSmallimgurl());
 			} else {
 				caipin1.setImageResource(R.drawable.nopic);
 			}
 			if (dishs.get(1).getSmallimgurl() != null) {
 
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin2, dishs.get(1)
-						.getSmallimgurl(), R.drawable.nopic);
+				imgLoader.loadBitmap(caipin2, dishs.get(1).getSmallimgurl());
 			} else {
 				caipin2.setImageResource(R.drawable.ic_launcher);
 			}
 			if (dishs.get(2).getSmallimgurl() != null) {
 
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin3, dishs.get(2)
-						.getSmallimgurl(), R.drawable.nopic);
+				imgLoader.loadBitmap(caipin3, dishs.get(2).getSmallimgurl());
 			} else {
 				caipin3.setImageResource(R.drawable.ic_launcher);
 			}
 			if (dishs.get(3).getSmallimgurl() != null) {
-				AsynImageLoader asynImageLoader = new AsynImageLoader();
-				asynImageLoader.showImageAsyn(caipin4, dishs.get(3)
-						.getSmallimgurl(), R.drawable.nopic);
+
+				imgLoader.loadBitmap(caipin4, dishs.get(3).getSmallimgurl());
 			} else {
 				caipin4.setImageResource(R.drawable.ic_launcher);
 			}
@@ -575,15 +555,12 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		phone.setOnClickListener(this);
 		adv_viewPager = (ViewPager) getActivity().findViewById(
 				R.id.news_body_veiw);
-		adImages = new ArrayList<View>();
-		adAdapter = new HomeAdAdapter(adImages,getActivity(),myHandler);
+		adAdapter = new HomeAdAdapter(adImages, getActivity(), myHandler);
 		adv_viewPager.setAdapter(adAdapter);
 		adv_viewPager.setOnPageChangeListener(adAdapter);
-		
-		//adv_viewPager.setOnClickListener(this);
-	}
 
-	
+		// adv_viewPager.setOnClickListener(this);
+	}
 
 	@Override
 	public void onStop() {
@@ -595,7 +572,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	public void onDestroyView() {
 		// TODO Auto-generated method stub
 		super.onDestroyView();
-		
+
 	}
 
 	@Override

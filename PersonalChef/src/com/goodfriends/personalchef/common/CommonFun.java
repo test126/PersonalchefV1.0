@@ -27,52 +27,52 @@ public class CommonFun {
 	/**
 	 * 首页广告接口url
 	 */
-	private static final String advurl = "http://120.24.218.214/app/common/queryAds";
+	public static final String advurl = "http://120.24.218.214/app/common/queryAds";
 
 	/**
 	 * 首页菜品接口url
 	 */
-	private static final String dishurl = "http://120.24.218.214/app/dish/queryRecommendDishes";
+	public static final String dishurl = "http://120.24.218.214/app/dish/queryRecommendDishes";
 
 	/**
 	 * 分类菜系列表url
 	 */
-	private static final String caixiurl = "http://120.24.218.214/app/common/queryAllCookStyle";
+	public static final String caixiurl = "http://120.24.218.214/app/common/queryAllCookStyle";
 
 	/**
 	 * 分类厨师籍贯列表url
 	 */
-	private static final String jiguanurl = "http://120.24.218.214/app/common/queryNativePlace";
+	public static final String jiguanurl = "http://120.24.218.214/app/common/queryNativePlace";
 
 	/**
 	 * 分类菜品列表url
 	 */
-	private static final String categorychefurl = "http://120.24.218.214/app/dish/queryDishList";
+	public static final String categorychefurl = "http://120.24.218.214/app/dish/queryDishList";
 
 	/**
 	 * 厨师详细信息url
 	 */
-	private static final String chefdetailurl = "http://120.24.218.214/app/master/queryMasterDetail";
+	public static final String chefdetailurl = "http://120.24.218.214/app/master/queryMasterDetail";
 
 	/**
 	 * 收藏厨师url
 	 */
-	private static final String collectchefurl = "http://120.24.218.214/app/user/collectMaster";
+	public static final String collectchefurl = "http://120.24.218.214/app/user/collectMaster";
 
 	/**
 	 * 意见反馈url
 	 */
-	private static final String feedbackurl = "http://120.24.218.214/app/common/submitFeedback";
+	public static final String feedbackurl = "http://120.24.218.214/app/common/submitFeedback";
 
 	/**
 	 * 查询厨师评论列表接口url
 	 */
-	private static final String pinglunurl = "http://120.24.218.214/app/master/queryMasterEval";
+	public static final String pinglunurl = "http://120.24.218.214/app/master/queryMasterEval";
 
 	/**
 	 * 发送验证码
 	 */
-	private static final String msgurl = "http://120.24.218.214/app/user/sendDirectLoginSms";
+	public static final String msgurl = "http://120.24.218.214/app/user/sendDirectLoginSms";
 
 	/**
 	 * 获取首页广告列表

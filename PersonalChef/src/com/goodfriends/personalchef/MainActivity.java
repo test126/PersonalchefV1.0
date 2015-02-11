@@ -60,7 +60,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		mTab2.setOnClickListener(this);
 		mTab3.setOnClickListener(this);
 		mTab4.setOnClickListener(this);
-
 		mTab1.performClick();
 	}
 
