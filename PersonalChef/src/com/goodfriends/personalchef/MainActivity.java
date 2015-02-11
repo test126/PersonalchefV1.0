@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,14 +31,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	public static CategaryFragment categoryFragment;
 	public static OrderFragment orderFragment;
 	public static MeFragment meFragment;
-	
+
 	public RadioGroup radioGroup;
-	
+
 	private FragmentManager manager;
 	private FragmentTransaction trans;
 
 	public Fragment currentFragment;
 	public Fragment fromFragment;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,8 +48,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		setContentView(R.layout.activity_main1);
 
 		manager = getSupportFragmentManager();
-		trans = manager.beginTransaction();
 		
+
 		mTab1 = (RadioButton) findViewById(R.id.radio_button1);
 		mTab2 = (RadioButton) findViewById(R.id.radio_button2);
 		mTab3 = (RadioButton) findViewById(R.id.radio_button3);
@@ -88,71 +90,51 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	  public void switchContent(Fragment from, Fragment to) {
-	        if (currentFragment != to) {
-	        	currentFragment = to;
-	            if (!to.isAdded()) {    // 先判断是否被add过
-	                trans.hide(from).add(R.id.container, to).commit(); // 隐藏当前的fragment，add下一个到Activity中
-	            } else {
-	            	trans.hide(from).show(to).commit(); // 隐藏当前的fragment，显示下一个
-	            }
-	        }
-	    }
+	public void showFragment(Fragment fragment) {
+		trans = manager.beginTransaction();
+		if (currentFragment == null) {
+			trans.add(R.id.container, fragment).commit();
+			currentFragment = fragment;
+			return;
+		}
+		if(currentFragment == fragment){
+			return;
+		}
+		if (!fragment.isAdded()) { // 先判断是否被add过
+			trans.hide(currentFragment).add(R.id.container, fragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
+		} else {
+			trans.hide(currentFragment).show(fragment).commit(); // 隐藏当前的fragment，显示下一个
+		}
+		currentFragment = fragment;
+
+	}
+
 	@Override
 	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction tx = fm.beginTransaction();
 		switch (arg0.getId()) {
 		case R.id.radio_button1:
-			
 			if (homeFragment == null) {
 				homeFragment = new HomeFragment();
-				trans.add(R.id.container, homeFragment)
-				.commit(); 
-				currentFragment = homeFragment;
-				break;
-			}else{
-				tx.hide(currentFragment)
-				.show(homeFragment).commit();
-				currentFragment = homeFragment;
 			}
+			showFragment(homeFragment);
 			break;
 		case R.id.radio_button2:
 			if (categoryFragment == null) {
 				categoryFragment = new CategaryFragment();
-				tx.hide(currentFragment).add(R.id.container, categoryFragment);
-				currentFragment = categoryFragment;
-				break;
-			}else{
-				tx.hide(currentFragment)
-				.show(categoryFragment).commit();
-				currentFragment = categoryFragment;
 			}
+			showFragment(categoryFragment);
 			break;
 		case R.id.radio_button3:
 			if (orderFragment == null) {
 				orderFragment = new OrderFragment();
-				tx.hide(currentFragment).add(R.id.container, orderFragment);
-				currentFragment = orderFragment;
-				break;
-			}else{
-				tx.hide(currentFragment)
-				.show(orderFragment).commit();
-				currentFragment = orderFragment;
 			}
+			showFragment(orderFragment);
 			break;
 		case R.id.radio_button4:
 			if (meFragment == null) {
 				meFragment = new MeFragment();
-				tx.hide(currentFragment).add(R.id.container, meFragment);
-				currentFragment = meFragment;
-				break;
-			}else{
-				tx.hide(currentFragment)
-				.show(meFragment).commit();
-				currentFragment = meFragment;
 			}
+			showFragment(meFragment);
 			break;
 		default:
 			break;
