@@ -11,14 +11,17 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,7 +49,9 @@ import com.goodfriends.personalchef.common.Common;
 import com.goodfriends.personalchef.common.CommonFun;
 import com.goodfriends.personalchef.common.Msg;
 import com.goodfriends.personalchef.util.AsynImageLoader;
+import com.goodfriends.personalchef.util.FileCache;
 import com.goodfriends.personalchef.util.MyImageLoader;
+import com.goodfriends.personalchef.util.ShareImageCache;
 import com.goodfriends.personalchef.util.VolleyHttp;
 
 @SuppressLint("HandlerLeak")
@@ -103,16 +108,6 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		}
 	};
 
-	// Runnable advRunnable = new Runnable() {
-	//
-	// public void run() {
-	// // TODO Auto-generated method stub
-	// advs = CommonFun.getAdv(getActivity());
-	// if (advs != null) {
-	// myHandler.sendEmptyMessage(0);
-	// }
-	// }
-	// };
 
 	Runnable dishRunnable = new Runnable() {
 
@@ -138,26 +133,30 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		}
 	};
 
+	
+	public void notifyAdvsDataSetChanged(List<Advs> advs){
+		adImages.clear();
+		int size = advs.size();
+		for (int i = 0; i < size; i++) {
+			System.out.println("notify");
+			ImageView adv_image = new ImageView(getActivity());
+			adv_image.setScaleType(ScaleType.CENTER_CROP);
+			imgLoader.loadBitmap(adv_image, advs.get(i).getImgurl());
+			adImages.add(adv_image);
+		}
+		adAdapter.notifyDataSetChanged();
+		adAdapter.setRadioCircles();
+	}
 	private Handler myHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case Msg.get_advs_content:
 				advs = (List<Advs>) msg.obj;
-				int size = advs.size();
-				for (int i = 0; i < size; i++) {
-					ImageView adv_image = new ImageView(getActivity());
-					adv_image.setScaleType(ScaleType.CENTER_CROP);
-					imgLoader.loadBitmap(adv_image, advs.get(i).getImgurl());
-					adImages.add(adv_image);
-				}
-				adAdapter.notifyDataSetChanged();
-				adAdapter.setRadioCircles();
-				closeDialog();
+				notifyAdvsDataSetChanged(advs);
+				//保存标题广告信息
+				new ShareImageCache(HomeFragment.this.getActivity()).putAdvs(advs);
 				break;
 			case 0:
-				//closeDialog();
-				
-				// notifyFileChanged();
 				break;
 			case 1:
 				if (dishs.size() != 0) {
@@ -508,7 +507,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	}
 
 	private void initView() {
-		showDialog("loading");
+		//showDialog("loading");
 		scrollView = (ScrollView) getActivity().findViewById(R.id.scrollView);
 		scrollView.setHorizontalScrollBarEnabled(false);
 		chushi_more = (TextView) getActivity().findViewById(
@@ -555,11 +554,36 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		phone.setOnClickListener(this);
 		adv_viewPager = (ViewPager) getActivity().findViewById(
 				R.id.news_body_veiw);
+		getCacheAdvs();
 		adAdapter = new HomeAdAdapter(adImages, getActivity(), myHandler);
 		adv_viewPager.setAdapter(adAdapter);
 		adv_viewPager.setOnPageChangeListener(adAdapter);
-
 		// adv_viewPager.setOnClickListener(this);
+	}
+	
+	/**
+	 * 从本地取出上一次保存的标题广告信息
+	 */
+	public void getCacheAdvs(){
+		List<Advs> list = new ShareImageCache(this.getActivity()).getAdvs();
+		FileCache fileCache = new FileCache(imgLoader.getSDCacheDir());
+		int size = list.size();
+		for (int i = 0; i < size; i++) {
+			ImageView adv_image = new ImageView(getActivity());
+			adv_image.setScaleType(ScaleType.CENTER_CROP);
+			String imgUrl = list.get(i).getImgurl();
+			Log.i("share", "imgUrl "+imgUrl);
+			Bitmap bm = fileCache.getBitmapFromSD(imgUrl);
+			if( bm != null){
+				Log.i("share", "new le yi ge ");
+				adv_image.setImageBitmap(bm);
+			}else{
+				Log.i("share", "new le yi ge no pic");
+				adv_image.setImageResource(R.drawable.nopic);
+			}
+			adImages.add(adv_image);
+			
+		}
 	}
 
 	@Override

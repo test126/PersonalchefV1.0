@@ -4,81 +4,35 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import android.annotation.SuppressLint;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.util.LruCache;
-import com.android.volley.toolbox.ImageLoader.ImageCache;
+import android.util.Log;
+
 import com.goodfriends.personalchef.common.CommonFun;
 
-/**
- * 
- * @author ching yuan
- * @category 图片缓存，内存缓存和本地存储
- * 
- */
-public class BitmapCache implements ImageCache {
+public class FileCache {
 
-	private LruCache<String, Bitmap> mMemoryCache;// 内存缓存
+	
 	private String externalCacheDir;// SD卡缓存目录
-
-	public BitmapCache(String externalCacheDir) {
+	public FileCache(String externalCacheDir) {
+		super();
 		this.externalCacheDir = externalCacheDir;
-		initLruCache();
 	}
 
-	/**
-	 * 设置内存缓存
-	 */
-	private void initLruCache() {
-		// LruCache通过构造函数传入缓存值，以KB为单位。
-		Runtime runtime = Runtime.getRuntime();
-		int maxMemory = (int) runtime.maxMemory();
-		// 使用最大可用内存值的1/8作为缓存的大小。
-		int cacheSize = maxMemory / 1024 / 8;
-		mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-			@SuppressLint("NewApi")
-			@Override
-			protected int sizeOf(String key, Bitmap bitmap) {
-				// 重写此方法来衡量每张图片的大小，默认返回图片数量。
-				int size = bitmap.getByteCount();
-				return size / 1024;
-			}
-		};
-	}
-
-	@Override
-	public Bitmap getBitmap(String url) {
-
-		Bitmap mBitmap = mMemoryCache.get(url);
-		if (mBitmap == null) {
-			return getBitmapFromSD(url);
-		} else {
-			return mMemoryCache.get(url);
-		}
-	}
-
-	@Override
-	public void putBitmap(String url, Bitmap bitmap) {
-		mMemoryCache.put(url, bitmap);
-		putBitmapToSD(url, bitmap);
-	}
-
+	
 	/**
 	 * 对本地缓存的查找
 	 */
-	private Bitmap getBitmapFromSD(String url) {
+	public Bitmap getBitmapFromSD(String url) {
 		// SD卡不可用
 		if (externalCacheDir == null) {
 			return null;
 		}
-		if (url.equals(CommonFun.advurl)) {
-			externalCacheDir += "/"+CommonFun.advCacheDir;
-		}
 		// 截取文件名
 		int begin = url.lastIndexOf("/");
 		String bitmapName = url.substring(begin + 1);
-
+		Log.i("share", "externalCacheDir "+externalCacheDir);
 		File cacheDir = new File(externalCacheDir);
 		File[] cacheFiles = cacheDir.listFiles();
 		if (cacheFiles == null) {
@@ -89,18 +43,20 @@ public class BitmapCache implements ImageCache {
 		for (int i = 0; i < cacheFiles.length; i++) {
 			String fileName = cacheFiles[i].getName();
 			if (bitmapName.equals(fileName)) {
-				String fileUrl = externalCacheDir + "/"+bitmapName;
+				String fileUrl = externalCacheDir +"/"+ bitmapName;
+				Log.i("share", "fileUrl "+fileUrl);
 				return BitmapFactory.decodeFile(fileUrl);
 			}
 		}
 		return null;
 
 	}
-
+	
+	
 	/**
 	 * 保存文件到本地缓存
 	 */
-	private void putBitmapToSD(String url, Bitmap bitmap) {
+	public void putBitmapToSD(String url, Bitmap bitmap) {
 
 		// SD卡不可用
 		if (externalCacheDir == null) {
@@ -132,5 +88,6 @@ public class BitmapCache implements ImageCache {
 			e.printStackTrace();
 		}
 	}
+
 
 }

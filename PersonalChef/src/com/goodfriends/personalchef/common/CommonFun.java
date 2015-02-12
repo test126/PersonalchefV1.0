@@ -28,6 +28,7 @@ public class CommonFun {
 	 * 首页广告接口url
 	 */
 	public static final String advurl = "http://120.24.218.214/app/common/queryAds";
+	public static final String advCacheDir = "adv";
 
 	/**
 	 * 首页菜品接口url

@@ -19,7 +19,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class Common {
-
 	public static final int CHUSHI = 1;
 	public static final int CAIPIN = 2;
 

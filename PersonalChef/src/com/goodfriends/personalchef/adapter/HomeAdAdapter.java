@@ -46,7 +46,7 @@ public class HomeAdAdapter extends PagerAdapter implements OnPageChangeListener,
 				loopAdvUI();
 			}
 
-		},10,3000);
+		},1,3000);
 		
 	}
 	 
@@ -95,7 +95,6 @@ public class HomeAdAdapter extends PagerAdapter implements OnPageChangeListener,
 
 	@Override
 	public void onPageScrolled(int index, float arg1, int arg2) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -124,6 +123,7 @@ public class HomeAdAdapter extends PagerAdapter implements OnPageChangeListener,
 	public void setRadioCircles() {
 		radioGroup = (RadioGroup) pActivity
 				.findViewById(R.id.advs_gallery_mark);
+		radioGroup.removeAllViews();
 		for (int i = 0; i < adViewList.size(); i++) {
 			RadioButton rb = new RadioButton(pActivity);
 			rb.setId(i);

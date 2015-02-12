@@ -11,6 +11,11 @@ public class Advs implements Serializable{
 	private String imgurl;
 	private String url;
 
+	
+	public Advs() {
+		super();
+	}
+
 	public Advs(String imgurl, String url) {
 		this.imgurl = imgurl;
 		this.url = url;

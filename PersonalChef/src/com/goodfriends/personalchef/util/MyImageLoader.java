@@ -43,7 +43,7 @@ public class MyImageLoader {
 	 * 
 	 * @return 获取外部存储器缓存目录
 	 */
-	private String getSDCacheDir() {
+	public String getSDCacheDir() {
 		String externalCacheDir = null;
 		String sdState = Environment.getExternalStorageState();
 		if (sdState.equals(Environment.MEDIA_MOUNTED)) {
