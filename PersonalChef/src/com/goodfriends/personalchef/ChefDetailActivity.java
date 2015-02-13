@@ -37,6 +37,7 @@ import com.goodfriends.personalchef.common.CommonFun1;
 import com.goodfriends.personalchef.common.CommonUrl;
 import com.goodfriends.personalchef.util.ImageCallback;
 import com.goodfriends.personalchef.util.LoadImage;
+import com.goodfriends.personalchef.util.MyImageLoader;
 import com.goodfriends.personalchef.view.PullToRefreshListView.PullToRefreshBase;
 import com.goodfriends.personalchef.view.PullToRefreshListView.PullToRefreshListView;
 import com.goodfriends.personalchef.view.PullToRefreshListView.PullToRefreshBase.OnRefreshListener;
@@ -77,6 +78,7 @@ public class ChefDetailActivity extends Activity implements OnClickListener {
 	private ListView mListView;
 	private boolean b = false;
 	private int orderfee;
+	private MyImageLoader imgLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class ChefDetailActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		SysApplication.getInstance().addActivity(this);
 		setContentView(R.layout.activity_chefdetail);
+		imgLoader = new MyImageLoader(this);
+		
 		id = getIntent().getExtras().getInt("chefId");
 		userid = getSharedPreferences("USERINFO", MODE_PRIVATE).getInt(
 				"userId", 0);
@@ -571,13 +575,15 @@ public class ChefDetailActivity extends Activity implements OnClickListener {
 
 	private void setHeadImage(String url) {
 		// TODO Auto-generated method stub
-		LoadImage loadImage = new LoadImage(getResources());
-		loadImage.loadImage(url, new ImageCallback() {
-			public void imageLoaded(Bitmap bitmap) {
-				// TODO Auto-generated method stub
-				head.setImageBitmap(bitmap);
-			}
-		});
+		
+		imgLoader.loadBitmap(head, url);
+//		LoadImage loadImage = new LoadImage(getResources());
+//		loadImage.loadImage(url, new ImageCallback() {
+//			public void imageLoaded(Bitmap bitmap) {
+//				// TODO Auto-generated method stub
+//				head.setImageBitmap(bitmap);
+//			}
+//		});
 	};
 
 	@Override

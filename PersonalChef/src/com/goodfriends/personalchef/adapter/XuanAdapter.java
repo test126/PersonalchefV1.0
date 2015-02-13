@@ -15,16 +15,18 @@ import com.goodfriends.personalchef.R;
 import com.goodfriends.personalchef.bean.Dish;
 import com.goodfriends.personalchef.util.ImageCallback;
 import com.goodfriends.personalchef.util.LoadImage;
+import com.goodfriends.personalchef.util.MyImageLoader;
 
 public class XuanAdapter extends BaseAdapter {
 
 	private List<Dish> lists;
 	private Context context;
 	private LayoutInflater layoutInflater;
-
+	private MyImageLoader imgLoader;
 	public XuanAdapter(Context context, List<Dish> lists) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
+		imgLoader = new MyImageLoader(context);
 		this.lists = lists;
 		layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,14 +76,16 @@ public class XuanAdapter extends BaseAdapter {
 		holder.text_name.setText(lists.get(arg0).getName());
 		holder.text_times.setText(lists.get(arg0).getordercount() + "");
 		holder.text_intro.setText(lists.get(arg0).getDesc());
-		LoadImage loadImage = new LoadImage(context.getResources());
-		loadImage.loadImage(lists.get(arg0).getBigimgurl(),
-				new ImageCallback() {
-					public void imageLoaded(Bitmap bitmap) {
-						// TODO Auto-generated method stub
-						holder.iv_head.setImageBitmap(bitmap);
-					}
-				});
+		imgLoader.loadBitmap(holder.iv_head, lists.get(arg0).getBigimgurl());
+//		
+//		LoadImage loadImage = new LoadImage(context.getResources());
+//		loadImage.loadImage(lists.get(arg0).getBigimgurl(),
+//				new ImageCallback() {
+//					public void imageLoaded(Bitmap bitmap) {
+//						// TODO Auto-generated method stub
+//						holder.iv_head.setImageBitmap(bitmap);
+//					}
+//				});
 		return convertView;
 	}
 

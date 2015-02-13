@@ -89,7 +89,6 @@ public class HomeFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
 	}
 
@@ -290,13 +289,13 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			CategaryFragment.SWITCH = Common.CHUSHI;
 			CategaryFragment.cookstyleid = 0;
 			MainActivity.mTab2.performClick();
-			newCategory();
+			//newCategory();
 			break;
 		case R.id.home_caipin_more:
 			CategaryFragment.SWITCH = Common.CAIPIN;
 			CategaryFragment.cookstyleid = 0;
 			MainActivity.mTab2.performClick();
-			newCategory();
+			//newCategory();
 			break;
 		case R.id.home_chushi_iv1:
 			if (chefs != null) {
@@ -353,7 +352,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(0)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll2:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -361,7 +360,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(1)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll3:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -369,7 +368,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(2)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll4:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -377,7 +376,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(3)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll5:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -385,7 +384,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(4)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll6:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -393,7 +392,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(5)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll7:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -401,7 +400,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(6)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.ll8:
 			CategaryFragment.SWITCH = Common.CHUSHI;
@@ -409,7 +408,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					.getId();
 			CategaryFragment.cookstylename = LoadingActivity.caixis.get(7)
 					.getName();
-			newCategory();
+			MainActivity.mTab2.performClick();
 			break;
 		case R.id.home_huodong1:
 			getIndexFun1();
@@ -434,7 +433,6 @@ public class HomeFragment extends Fragment implements OnClickListener {
 						}
 					}).setNegativeButton("取消",
 					new DialogInterface.OnClickListener() {
-
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
@@ -479,20 +477,20 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		}).start();
 	}
 
-	private void newCategory() {
-		FragmentManager fm = getActivity().getSupportFragmentManager();
-		FragmentTransaction tx = fm.beginTransaction();
-		if (MainActivity.categoryFragment == null) {
-			MainActivity.categoryFragment = new CategaryFragment();
-		} else {
-			tx.remove(MainActivity.categoryFragment);
-			MainActivity.categoryFragment = new CategaryFragment();
-		}
-		tx.replace(R.id.container, MainActivity.categoryFragment);
-		tx.addToBackStack(null);
-		tx.commit();
-		MainActivity.mTab2.performClick();
-	}
+//	private void newCategory() {
+//		FragmentManager fm = getActivity().getSupportFragmentManager();
+//		FragmentTransaction tx = fm.beginTransaction();
+//		if (MainActivity.categoryFragment == null) {
+//			MainActivity.categoryFragment = new CategaryFragment();
+//		} else {
+//			tx.remove(MainActivity.categoryFragment);
+//			MainActivity.categoryFragment = new CategaryFragment();
+//		}
+//		tx.replace(R.id.container, MainActivity.categoryFragment);
+//		tx.addToBackStack(null);
+//		tx.commit();
+//		MainActivity.mTab2.performClick();
+//	}
 
 	private void toChefDetail(int id) {
 		Intent intent = new Intent(getActivity(), ChefDetailActivity.class);

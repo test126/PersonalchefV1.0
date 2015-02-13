@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -89,8 +90,17 @@ public class CategaryFragment extends Fragment implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		initView();
-
 		initValues();
+	}
+	
+
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		if(hidden == false){
+			initValues();
+			Log.i("cateFragment", "显示");
+		}
 	}
 
 	@Override
@@ -304,7 +314,7 @@ public class CategaryFragment extends Fragment implements OnClickListener {
 				R.id.expandtab_view2);
 	}
 
-	private void initValues() {
+	public void initValues() {
 		if (SWITCH == Common.CHUSHI) {
 			setChuShiVisiable();
 			if (expandTabView1.getChildCount() == 0) {

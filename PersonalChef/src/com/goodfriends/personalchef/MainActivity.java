@@ -60,7 +60,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		mTab2.setOnClickListener(this);
 		mTab3.setOnClickListener(this);
 		mTab4.setOnClickListener(this);
-		mTab1.performClick();
+		
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		if(currentFragment==null){
+			mTab1.performClick();
+		}
 	}
 
 	@Override
@@ -89,19 +98,26 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void newFragment(){
+		
+	}
 	public void showFragment(Fragment fragment) {
 		trans = manager.beginTransaction();
 		if (currentFragment == null) {
 			trans.add(R.id.container, fragment).commit();
 			currentFragment = fragment;
+			Log.i("main", "当前fragment 为空 ，于是新建一个");
 			return;
 		}
-		if(currentFragment == fragment){
+		if(currentFragment== fragment){
+			Log.i("main", "点击同一个fragment");
 			return;
 		}
 		if (!fragment.isAdded()) { // 先判断是否被add过
+			Log.i("main", "fragment add 一个");
 			trans.hide(currentFragment).add(R.id.container, fragment).commit(); // 隐藏当前的fragment，add下一个到Activity中
 		} else {
+			Log.i("main", "fragment show 一个");
 			trans.hide(currentFragment).show(fragment).commit(); // 隐藏当前的fragment，显示下一个
 		}
 		currentFragment = fragment;

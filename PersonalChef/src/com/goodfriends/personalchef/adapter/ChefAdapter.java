@@ -15,12 +15,15 @@ import com.goodfriends.personalchef.R;
 import com.goodfriends.personalchef.bean.Chefs;
 import com.goodfriends.personalchef.util.ImageCallback;
 import com.goodfriends.personalchef.util.LoadImage;
+import com.goodfriends.personalchef.util.MyImageLoader;
 
 public class ChefAdapter extends BaseAdapter {
 
 	private List<Chefs> lists;
 	private LayoutInflater layoutInflater;
 	private Context context;
+	private MyImageLoader imgLoader;
+	
 
 	public ChefAdapter(Context context, List<Chefs> lists) {
 		// TODO Auto-generated constructor stub
@@ -28,6 +31,7 @@ public class ChefAdapter extends BaseAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.lists = lists;
 		this.context = context;
+		imgLoader = new MyImageLoader(context);
 	}
 
 	@Override
@@ -128,94 +132,126 @@ public class ChefAdapter extends BaseAdapter {
 		default:
 			break;
 		}
-		LoadImage loadImage = new LoadImage(context.getResources());
-		loadImage.loadImage(lists.get(position).getHeadpicurl(),
-				new ImageCallback() {
-					public void imageLoaded(Bitmap bitmap) {
-						// TODO Auto-generated method stub
-						holder.iv_head.setImageBitmap(bitmap);
-					}
-				});
+		imgLoader.loadBitmap(holder.iv_head, lists.get(position).getHeadpicurl());
+//		LoadImage loadImage = new LoadImage(context.getResources());
+//		loadImage.loadImage(lists.get(position).getHeadpicurl(),
+//				new ImageCallback() {
+//					public void imageLoaded(Bitmap bitmap) {
+//						// TODO Auto-generated method stub
+//						holder.iv_head.setImageBitmap(bitmap);
+//					}
+//				});
 		switch (lists.get(position).getDishs().size()) {
 		case 0:
 			break;
 		case 1:
-			loadImage.loadImage(lists.get(position).getDishs().get(0)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish1.setImageBitmap(bitmap);
-				}
-			});
+			imgLoader.loadBitmap(holder.dish1, lists.get(position).getDishs().get(0)
+					.getImgurl());
+//			
+//			loadImage.loadImage(lists.get(position).getDishs().get(0)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish1.setImageBitmap(bitmap);
+//				}
+//			});
 			break;
 		case 2:
-			loadImage.loadImage(lists.get(position).getDishs().get(0)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish1.setImageBitmap(bitmap);
-				}
-			});
-			loadImage.loadImage(lists.get(position).getDishs().get(1)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish2.setImageBitmap(bitmap);
-				}
-			});
+			imgLoader.loadBitmap(holder.dish1, lists.get(position).getDishs().get(0)
+					.getImgurl());
+//			
+//			loadImage.loadImage(lists.get(position).getDishs().get(0)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish1.setImageBitmap(bitmap);
+//				}
+//			});
+			
+			imgLoader.loadBitmap(holder.dish2, lists.get(position).getDishs().get(1)
+					.getImgurl());
+//			loadImage.loadImage(lists.get(position).getDishs().get(1)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish2.setImageBitmap(bitmap);
+//				}
+//			});
 			break;
 		case 3:
-			loadImage.loadImage(lists.get(position).getDishs().get(0)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish1.setImageBitmap(bitmap);
-				}
-			});
-			loadImage.loadImage(lists.get(position).getDishs().get(1)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish2.setImageBitmap(bitmap);
-				}
-			});
-			loadImage.loadImage(lists.get(position).getDishs().get(2)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish3.setImageBitmap(bitmap);
-				}
-			});
+			imgLoader.loadBitmap(holder.dish1, lists.get(position).getDishs().get(1)
+					.getImgurl());
+			
+//			loadImage.loadImage(lists.get(position).getDishs().get(0)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish1.setImageBitmap(bitmap);
+//				}
+//			});
+			
+			imgLoader.loadBitmap(holder.dish2, lists.get(position).getDishs().get(1)
+					.getImgurl());
+			
+//			loadImage.loadImage(lists.get(position).getDishs().get(1)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish2.setImageBitmap(bitmap);
+//				}
+//			});
+			
+			imgLoader.loadBitmap(holder.dish3, lists.get(position).getDishs().get(2)
+					.getImgurl());
+			
+//			loadImage.loadImage(lists.get(position).getDishs().get(2)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish3.setImageBitmap(bitmap);
+//				}
+//			});
 			break;
 		case 4:
-			loadImage.loadImage(lists.get(position).getDishs().get(0)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish1.setImageBitmap(bitmap);
-				}
-			});
-			loadImage.loadImage(lists.get(position).getDishs().get(1)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish2.setImageBitmap(bitmap);
-				}
-			});
-			loadImage.loadImage(lists.get(position).getDishs().get(2)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish3.setImageBitmap(bitmap);
-				}
-			});
-			loadImage.loadImage(lists.get(position).getDishs().get(3)
-					.getImgurl(), new ImageCallback() {
-				public void imageLoaded(Bitmap bitmap) {
-					// TODO Auto-generated method stub
-					holder.dish4.setImageBitmap(bitmap);
-				}
-			});
+			
+			imgLoader.loadBitmap(holder.dish1, lists.get(position).getDishs().get(1)
+					.getImgurl());
+			imgLoader.loadBitmap(holder.dish2, lists.get(position).getDishs().get(1)
+					.getImgurl());
+			
+			imgLoader.loadBitmap(holder.dish3, lists.get(position).getDishs().get(2)
+					.getImgurl());
+			imgLoader.loadBitmap(holder.dish4, lists.get(position).getDishs().get(3)
+					.getImgurl());
+//			
+//			loadImage.loadImage(lists.get(position).getDishs().get(0)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish1.setImageBitmap(bitmap);
+//				}
+//			});
+//			loadImage.loadImage(lists.get(position).getDishs().get(1)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish2.setImageBitmap(bitmap);
+//				}
+//			});
+//			loadImage.loadImage(lists.get(position).getDishs().get(2)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish3.setImageBitmap(bitmap);
+//				}
+//			});
+//			loadImage.loadImage(lists.get(position).getDishs().get(3)
+//					.getImgurl(), new ImageCallback() {
+//				public void imageLoaded(Bitmap bitmap) {
+//					// TODO Auto-generated method stub
+//					holder.dish4.setImageBitmap(bitmap);
+//				}
+//			});
 			break;
 		default:
 			break;
